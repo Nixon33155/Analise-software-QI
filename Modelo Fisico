@@ -1,0 +1,58 @@
+-- Criando a tabela Usuarios
+CREATE TABLE Usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    senha VARCHAR(255) NOT NULL,
+    papel VARCHAR(50) NOT NULL
+);
+
+-- Criando a tabela Produtos
+CREATE TABLE Produtos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    descricao TEXT,
+    preco DECIMAL(10, 2) NOT NULL,
+    quantidade_estoque INT NOT NULL
+);
+
+-- Criando a tabela Producao
+CREATE TABLE Producao (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    produto_id INT NOT NULL,
+    quantidade INT NOT NULL,
+    quantidade_defeito INT DEFAULT 0,
+    quantidade_descarte INT DEFAULT 0,
+    FOREIGN KEY (produto_id) REFERENCES Produtos(id) ON DELETE CASCADE
+);
+
+-- Criando a tabela Vendas
+CREATE TABLE Vendas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    produto_id INT NOT NULL,
+    quantidade INT NOT NULL,
+    total_valor DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (usuario_id) REFERENCES Usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (produto_id) REFERENCES Produtos(id) ON DELETE CASCADE
+);
+
+-- Criando a tabela RelatoriosQualidade
+CREATE TABLE RelatoriosQualidade (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    produto_id INT NOT NULL,
+    taxa_erro DECIMAL(5, 2) NOT NULL,
+    taxa_desperdicio DECIMAL(5, 2) NOT NULL,
+    FOREIGN KEY (produto_id) REFERENCES Produtos(id) ON DELETE CASCADE
+);
+
+-- Criando a tabela Entregas
+CREATE TABLE Entregas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    produto_id INT NOT NULL,
+    quantidade INT NOT NULL,
+    cliente_id INT NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    FOREIGN KEY (produto_id) REFERENCES Produtos(id) ON DELETE CASCADE,
+    FOREIGN KEY (cliente_id) REFERENCES Usuarios(id) ON DELETE CASCADE
+);
